@@ -1,12 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Task List</title>
-    </head>
-    <body>
-        <h1> Task List </h1>
-        <p> {{ task }} </p>
-    </body>
-</html>
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{task.name}}{% endblock %}
+{% block content %}
+<h1> <a href="/tasks/list"> Task List </a></h1>
+<p> {{ task }} </p>
+{% endblock %}
