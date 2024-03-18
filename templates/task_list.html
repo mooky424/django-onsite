@@ -19,4 +19,23 @@
     </li>
 {% endfor %}
 </ul>
+<form method="POST">
+    {% csrf_token %}
+    <label for="task_name">
+        <span>Task Name</span>
+        <input type="text" id="task_name" name="task_name">
+    </label>
+    <label for="task_due">
+        <span>Due Date</span>
+        <input type="datetime-local" id="task_due" name="task_due">
+    </label>
+    <select name="taskgroup" id="taskgroup">
+        {% for group in taskgroups %}
+        <option value="{{ group.pk }}">
+            {{ group }}
+        </option>
+        {% endfor %}
+    </select>
+    <button type="submit"> Submit </button>
+</form>
 {% endblock %}
