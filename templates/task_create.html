@@ -1,12 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}{{task.name}}{% endblock %}
+{% block title %}Task List{% endblock %}
 {% block content %}
-<h1> <a href="/tasks/list"> Task List </a></h1>
-<p> {{ task }} </p>
 <form method="POST">
     {% csrf_token %}
     {{ form }}
     <button type="submit">Submit</button>
 </form>
-{% endblock %}
+{% endblock content %}
