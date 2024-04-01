@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
@@ -14,15 +14,19 @@ def index(request):
 
 def task_list(request):
     tasks = Task.objects.all()
+    form = TaskForm() 
+
+    if request.method == "POST":
+        form = TaskForm(request.POST) 
+        if form.is_valid():
+            task = form.save() #Model Form thingz
+            return redirect('task_detail', pk=task.pk)
+    
     ctx = {
         'object_list': tasks,
         "taskgroups": TaskGroup.objects.all(),
         "form" : form,
     }
-    if request.method == "POST":
-        form = TaskForm(request.POST) 
-        if form.is_valid():
-            form.save() #Model Form thingz
     
     return render(request, 'task_list.html', ctx)
 
@@ -40,33 +44,34 @@ class TaskListView(ListView):
     
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['taskgroups'] = TaskGroup.objects.all()
         ctx['form'] = TaskForm()
+        ctx['taskgroups'] = TaskGroup.objects.all()
         return ctx
 
     def post (self, request, *args, **kwargs):
         form = TaskForm(request.POST) 
         if form.is_valid():
-            task = Task()
-            task.name = form.cleaned_data["name"]
-            task.due_date = form.cleaned_data["due_date"]
-            task.taskgroup = form.cleaned_data["taskgroup"]
-            task.save()
-
-        return self.get(request, *args, **kwargs)
+            form.save()
+            return self.get(request, *args, **kwargs)
+        else:
+            self.object_list = self.get_queryset(**kwargs)
+            ctx = self.get_context_data(**kwargs)
+            ctx['form'] = form
+            return self.render_to_response(ctx)
+            
 
 class TaskDetailView(LoginRequiredMixin, DetailView):
     model = Task
     template_name = 'task_detail.html'
 
 
-class TaskCreateView(CreateView):
+class TaskCreateView(LoginRequiredMixin, CreateView):
     model = Task
     fields = '__all__'
     template_name = 'task_create.html'
 
 
-class TaskUpdateView(UpdateView):
+class TaskUpdateView(LoginRequiredMixin, UpdateView):
     model = Task
     fields = '__all__'
     template_name = 'task_detail.html'

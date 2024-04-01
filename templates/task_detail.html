@@ -3,6 +3,9 @@
 {% block title %}{{task.name}}{% endblock %}
 {% block content %}
 <h1> <a href="/tasks/list"> Task List </a></h1>
+{% if object.task_image %}
+<img src="{{ object.task_image.url }}">
+{% endif %}
 <p> {{ task }} </p>
 <form method="POST">
     {% csrf_token %}
