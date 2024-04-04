@@ -17,14 +17,15 @@ class TaskGroupAdmin(admin.ModelAdmin):
 class TaskAdmin(admin.ModelAdmin):
     model = Task
 
-    list_display = ["name", "due_date"]
-    search_fields = [
-        "name",
+    list_display = ['name', 'due_date']
+    search_fields = ['name', ]
+    list_filter = ['due_date']
+
+    fieldsets = [
+        ('Details', {
+            'fields' : ['name', 'due_date', 'taskgroup', 'task_image']
+        })
     ]
-    list_filter = ["due_date"]
-
-    fieldsets = [("Details", {"fields": ["name", "due_date", "taskgroup"]})]
-
 
 admin.site.register(TaskGroup, TaskGroupAdmin)
 admin.site.register(Task, TaskAdmin)

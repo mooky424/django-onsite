@@ -13,6 +13,7 @@ class Task(models.Model):
     name = models.CharField(max_length=100)
     due_date = models.DateTimeField(null=False)
     taskgroup = models.ForeignKey(TaskGroup, on_delete=models.CASCADE, related_name='tasks')
+    task_image = models.ImageField(upload_to="img/", null=True)
 
     def __str__(self):
         return f"{self.name}: due on {self.due_date}"
