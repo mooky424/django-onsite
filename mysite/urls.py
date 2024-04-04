@@ -22,3 +22,5 @@ urlpatterns = [
     path('tasks/', include('tasks.urls', namespace ='tasks')),
     path('accounts/', include('django.contrib.auth.urls')),
 ]
+
+# <link of site>/tasks/list
